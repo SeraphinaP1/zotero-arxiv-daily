@@ -12,6 +12,7 @@ from queue import Empty
 from typing import Any, Callable, TypeVar
 from loguru import logger
 import requests
+import time
 
 T = TypeVar("T")
 
@@ -133,6 +134,7 @@ class ArxivRetriever(BaseRetriever):
         # Get full information of each paper from arxiv api
         bar = tqdm(total=len(all_paper_ids))
         for i in range(0, len(all_paper_ids), 20):
+            time.sleep(3)  # <--- 就是加在这里！每次发请求前强制等3秒
             search = arxiv.Search(id_list=all_paper_ids[i:i + 20])
             batch = list(client.results(search))
             bar.update(len(batch))
